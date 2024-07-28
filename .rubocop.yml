@@ -1,0 +1,94 @@
+AllCops:
+  NewCops: disable
+  Exclude:
+    - vendor/**/*
+    - .git/**/*
+    - db/**/*
+    - bin/*
+    - config/*
+    - config/**/*
+    - lib/*
+  TargetRubyVersion: 3.2
+
+#################### Style ###########################
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Style/DoubleNegation:
+  Enabled: false
+
+Style/EmptyMethod:
+  Enabled: false
+
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/ModuleFunction:
+  Enabled: false
+
+#################### Naming ##########################
+
+Naming/AccessorMethodName:
+  Enabled: false
+
+Naming/PredicateName:
+  Enabled: false
+
+#################### Metrics #########################
+
+Metrics/AbcSize:
+  Max: 17
+
+Metrics/BlockLength:
+  CountComments: false
+  Max: 25
+  Exclude:
+    - '**/routes.rb'
+    - 'config/**/*'
+    - 'db/migrate/*.rb'
+    - 'lib/tasks/**/*.rake'
+    - '**/*_spec.rb'
+    - 'spec/factories/**/*.rb'
+    - 'spec/support/shared_contexts/**/*.rb'
+    - 'spec/swagger_helper.rb'
+
+Metrics/BlockNesting:
+  CountBlocks: false
+  Max: 3
+
+Metrics/ClassLength:
+  CountComments: false
+  Max: 350
+
+Metrics/CyclomaticComplexity:
+  Max: 6
+
+Layout/LineLength:
+  Max: 100
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
+  IgnoreCopDirectives: true
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 12
+
+Metrics/ModuleLength:
+  CountComments: false
+  Max: 200
+
+Metrics/PerceivedComplexity:
+  Max: 7
+
+##################### Layout ##########################
+
+Layout/MultilineMethodCallIndentation:
+  Enabled: false
+
