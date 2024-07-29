@@ -1,5 +1,6 @@
 
 Rails.application.routes.draw do
+  post "/graphql", to: "graphql#execute"
   mount Rswag::Ui::Engine => '/api-docs'
   mount Rswag::Api::Engine => '/api-docs'
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
@@ -8,6 +9,5 @@ Rails.application.routes.draw do
   # Can be used by load balancers and uptime monitors to verify that the app is live.
   get 'up' => 'rails/health#show', as: :rails_health_check
 
-  # Defines the root path route ("/")
-  # root "posts#index"
+  post '/auth/:provider/callback', to: 'auth#google_oauth2'
 end

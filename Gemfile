@@ -16,7 +16,7 @@ gem 'graphiql-rails', group: :development
 gem 'graphql'
 
 # Authentication
-gem 'devise'
+gem 'jwt'
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 
@@ -24,7 +24,7 @@ gem 'omniauth-google-oauth2'
 gem 'pundit'
 
 # Image uploads
-gem 'aws-sdk-s3'
+gem 'aws-sdk-s3', '~> 1.48'
 gem 'paperclip'
 
 # Soft delete

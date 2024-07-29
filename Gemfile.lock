@@ -95,7 +95,6 @@ GEM
     aws-sigv4 (1.9.0)
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.2.0)
-    bcrypt (3.1.20)
     bigdecimal (3.1.8)
     bootsnap (1.18.3)
       msgpack (~> 1.2)
@@ -106,12 +105,6 @@ GEM
     connection_pool (2.4.1)
     crass (1.0.6)
     date (3.3.4)
-    devise (4.9.4)
-      bcrypt (~> 3.0)
-      orm_adapter (~> 0.1)
-      railties (>= 4.1.0)
-      responders
-      warden (~> 1.2.3)
     diff-lcs (1.5.1)
     drb (2.2.1)
     erubi (1.13.0)
@@ -197,7 +190,6 @@ GEM
     omniauth-oauth2 (1.8.0)
       oauth2 (>= 1.4, < 3)
       omniauth (~> 2.0)
-    orm_adapter (0.5.0)
     paperclip (6.1.0)
       activemodel (>= 4.2.0)
       activesupport (>= 4.2.0)
@@ -268,9 +260,6 @@ GEM
     regexp_parser (2.9.2)
     reline (0.5.9)
       io-console (~> 0.5)
-    responders (3.1.1)
-      actionpack (>= 5.2)
-      railties (>= 5.2)
     rexml (3.3.2)
       strscan
     rspec-core (3.13.0)
@@ -333,8 +322,6 @@ GEM
     unicode-display_width (2.5.0)
     uri (0.13.0)
     version_gem (1.1.4)
-    warden (1.2.9)
-      rack (>= 2.0.9)
     webrick (1.8.1)
     websocket-driver (0.7.6)
       websocket-extensions (>= 0.1.0)
@@ -346,12 +333,12 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  aws-sdk-s3
+  aws-sdk-s3 (~> 1.48)
   bootsnap
   byebug
-  devise
   graphiql-rails
   graphql
+  jwt
   omniauth
   omniauth-google-oauth2
   paperclip
