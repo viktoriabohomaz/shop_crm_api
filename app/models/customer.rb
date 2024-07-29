@@ -10,5 +10,5 @@ class Customer < ApplicationRecord
   validates :created_by_id, :updated_by_id, presence: true
 
   has_attached_file :photo, styles: { medium: '300x300>', thumb: '100x100>' }
-  validates_attachment_content_type :photo, content_type: %r{\Aimage/.*\z}
+  validates_attachment_content_type :photo, content_type: ['image/jpeg', 'image/jpg', 'image/png']
 end
