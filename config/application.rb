@@ -2,6 +2,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require_relative '../app/middleware/jwt_middleware'
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -11,6 +12,10 @@ module ShopCrmApi
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
+
+    # Автозагрузка и eager load путей
+    config.autoload_paths += %W(#{config.root}/app/services #{config.root}/app/middleware)
+    config.eager_load_paths += %W(#{config.root}/app/services #{config.root}/app/middleware)
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.

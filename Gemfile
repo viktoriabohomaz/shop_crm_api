@@ -16,7 +16,6 @@ gem 'graphiql-rails', group: :development
 gem 'graphql'
 gem 'graphql-docs'
 
-
 # Authentication
 gem 'jwt'
 gem 'oauth2'
@@ -58,6 +57,6 @@ group :development, :test do
 end
 
 group :test do
-  gem 'ffaker'
   gem 'factory_bot_rails'
+  gem 'ffaker'
 end
