@@ -12,7 +12,7 @@ class UserPolicy < ApplicationPolicy
   end
 
   def update?
-    user.present? && user.is_admin? 
+    user.present? && user.is_admin?
   end
 
   def destroy?

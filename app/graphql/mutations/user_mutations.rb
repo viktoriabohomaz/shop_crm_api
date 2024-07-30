@@ -10,45 +10,45 @@ module Mutations
     field :errors, [String], null: false
 
     def create_user
-      user = User.new(user_params)
       authorize user, :create?
+      user = User.new(user_params)
 
       if user.save
-        { user: user, errors: [] }
+        { user:, errors: [] }
       else
         { user: nil, errors: user.errors.full_messages }
       end
     end
 
     def update_user
-      user = User.find_by(id: id)
       authorize user, :update?
+      user = User.find_by(id:)
 
       if user.update(user_params)
-        { user: user, errors: [] }
+        { user:, errors: [] }
       else
         { user: nil, errors: user.errors.full_messages }
       end
     end
 
     def delete_user
-      user = User.find_by(id: id)
       authorize user, :destroy?
+      user = User.find_by(id:)
 
       if user.destroy
-        { user: user, errors: [] }
+        { user:, errors: [] }
       else
         { user: nil, errors: user.errors.full_messages }
       end
     end
 
     def change_admin_status
-      user = User.find_by(id: id)
       authorize user, :change_admin_status?
+      user = User.find_by(id:)
 
       user.is_admin = is_admin
       if user.save
-        { user: user, errors: [] }
+        { user:, errors: [] }
       else
         { user: nil, errors: user.errors.full_messages }
       end
@@ -58,10 +58,10 @@ module Mutations
 
     def user_params
       {
-        email: email,
-        first_name: first_name,
-        last_name: last_name,
-        is_admin: is_admin
+        email:,
+        first_name:,
+        last_name:,
+        is_admin:
       }
     end
   end

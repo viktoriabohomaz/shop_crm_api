@@ -1,7 +1,9 @@
 module Types
   class QueryType < BaseObject
-    field :list_customers, [Types::CustomerType], null: false, description: "Returns a list of all customers" do
-      argument :include_deleted, Boolean, required: false, default_value: false, description: "Flag to include soft-deleted customers"
+    field :list_customers, [Types::CustomerType], null: false,
+                                                  description: 'Returns a list of all customers' do
+      argument :include_deleted, Boolean, required: false, default_value: false,
+                                          description: 'Flag to include soft-deleted customers'
     end
 
     def list_customers(include_deleted:)
@@ -23,8 +25,9 @@ module Types
       customer
     end
 
-    field :list_users, [Types::UserType], null: false, description: "Returns a list of all users" do
-      argument :include_deleted, Boolean, required: false, default_value: false, description: "Flag to include soft-deleted users"
+    field :list_users, [Types::UserType], null: false, description: 'Returns a list of all users' do
+      argument :include_deleted, Boolean, required: false, default_value: false,
+                                          description: 'Flag to include soft-deleted users'
     end
 
     def list_users(include_deleted:)
