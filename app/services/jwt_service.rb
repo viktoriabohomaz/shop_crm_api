@@ -1,5 +1,5 @@
 class JwtService
-  HMAC_SECRET = Rails.application.credentials.jwt_secret
+  HMAC_SECRET = ENV['HMAC_SECRET']
 
   def self.encode(payload, exp = 24.hours.from_now)
     payload[:exp] = exp.to_i

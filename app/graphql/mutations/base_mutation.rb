@@ -5,9 +5,9 @@ module Mutations
     input_object_class Types::BaseInputObject
     object_class Types::BaseObject
 
-    def authorize(record, query)
-      policy = Pundit.policy!(context[:current_user], record)
-      return if policy.public_send(query)
+    def authorize(user, action, record_class)
+      policy = Pundit.policy!(user, record_class)
+      return if policy.public_send(action)
 
       raise GraphQL::ExecutionError, 'Not authorized'
     end

@@ -12,7 +12,6 @@ module Mutations
 
       def resolve(id:, first_name: nil, last_name: nil, photo: nil, created_by_id: nil,
                   updated_by_id: nil)
-        # Авторизация
         customer = Customer.find_by(id:)
         authorize context[:current_user], :update?, customer
 

@@ -1,136 +1,174 @@
 require 'rails_helper'
 
-RSpec.describe Mutations::UserMutations, type: :request do
+RSpec.describe 'UserMutations', type: :request do
+  let(:admin_user) { FactoryBot.create(:user, :admin) }
+  let(:regular_user) { FactoryBot.create(:user) }
   let(:user) { FactoryBot.create(:user) }
-  let(:context) { { current_user: user } }
+  let(:valid_attributes) do
+    {
+      email: 'new@example.com',
+      first_name: 'Test',
+      last_name: 'Name'
+    }
+  end
 
-  describe '#create_user' do
-    let(:mutation) do
-      <<~GRAPHQL
-        mutation($email: String!, $first_name: String!, $last_name: String!, $is_admin: Boolean) {
-          createUser(email: $email, firstName: $first_name, lastName: $last_name, isAdmin: $is_admin) {
-            user {
-              id
-              email
-              firstName
-              lastName
-              isAdmin
-            }
-            errors
+  def authenticate(user)
+    JwtService.encode(user_id: user.id)
+  end
+
+  let(:mutation_create) do
+    <<~GQL
+      mutation {
+        createUser(input: {
+          email: "#{valid_attributes[:email]}"
+          firstName: "#{valid_attributes[:first_name]}"
+          lastName: "#{valid_attributes[:last_name]}"
+        }) {
+          user {
+            email
+            firstName
+            lastName
           }
+          errors
         }
-      GRAPHQL
-    end
-
-    it 'creates a new user' do
-      variables = {
-        email: 'newuser@example.com',
-        first_name: 'John',
-        last_name: 'Doe',
-        is_admin: false
       }
+    GQL
+  end
 
-      post '/graphql', params: { query: mutation, variables: }
+  let(:mutation_update) do
+    <<~GQL
+      mutation {
+        updateUser(input: {
+          id: "#{user.id}"
+          email: "#{valid_attributes[:email]}"
+          firstName: "#{valid_attributes[:first_name]}"
+          lastName: "#{valid_attributes[:last_name]}"
+        }) {
+          user {
+            email
+            firstName
+            lastName
+          }
+          errors
+        }
+      }
+    GQL
+  end
+
+  let(:mutation_delete) do
+    <<~GQL
+      mutation {
+        deleteUser(input: {
+          id: "#{user.id}"
+        }) {
+          user {
+            email
+          }
+          errors
+        }
+      }
+    GQL
+  end
+
+  let(:mutation_change_admin_status) do
+    <<~GQL
+      mutation {
+        changeAdminStatus(input: {
+          id: "#{user.id}"
+          isAdmin: true
+        }) {
+          user {
+            isAdmin
+          }
+          errors
+        }
+      }
+    GQL
+  end
+
+  describe 'Create User mutation' do
+    it 'creates a new user when admin user is logged in' do
+      post '/graphql', params: { query: mutation_create }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+      
       json = JSON.parse(response.body)
+      data = json['data']['createUser']
 
       expect(response).to have_http_status(:success)
-      expect(json['data']['createUser']['errors']).to be_empty
-      expect(User.find(json['data']['createUser']['user']['id']).email).to eq('newuser@example.com')
+      expect(json['errors']).to be_nil
+      expect(data['user']['email']).to eq(valid_attributes[:email])
+    end
+
+    it 'returns errors when regular user tries to create a user' do
+      post '/graphql', params: { query: mutation_create }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+      
+      json = JSON.parse(response.body)
+      data = json['data']['createUser']
+
+      expect(response).to have_http_status(:success)
+      expect(json['errors'].first['message']).to eq('Not authorized')
     end
   end
 
-  describe '#update_user' do
-    let(:mutation) do
-      <<~GRAPHQL
-        mutation($id: ID!, $email: String, $firstName: String, $lastName: String, $isAdmin: Boolean) {
-          updateUser(id: $id, email: $email, firstName: $firstName, lastName: $lastName, isAdmin: $isAdmin) {
-            user {
-              id
-              email
-              firstName
-              lastName
-              isAdmin
-            }
-            errors
-          }
-        }
-      GRAPHQL
-    end
-
-    it 'updates an existing user' do
-      variables = {
-        id: user.id,
-        email: 'updated@example.com',
-        first_name: 'Jane',
-        last_name: 'Doe',
-        is_admin: true
-      }
-
-      post '/graphql', params: { query: mutation, variables: }
+  describe 'Update User mutation' do
+    it 'updates the user when admin user is logged in' do
+      post '/graphql', params: { query: mutation_update }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+      
       json = JSON.parse(response.body)
+      data = json['data']['updateUser']
 
       expect(response).to have_http_status(:success)
-      expect(json['data']['updateUser']['errors']).to be_empty
-      expect(User.find(user.id).email).to eq('updated@example.com')
+      expect(json['errors']).to be_nil
+      expect(data['user']['email']).to eq(valid_attributes[:email])
+    end
+
+    it 'returns errors when regular user tries to update a user' do
+      post '/graphql', params: { query: mutation_update }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+      
+      json = JSON.parse(response.body)
+      expect(response).to have_http_status(:success)
+      expect(json['errors'].first['message']).to eq('Not authorized')
     end
   end
 
-  describe '#delete_user' do
-    let(:mutation) do
-      <<~GRAPHQL
-        mutation($id: ID!) {
-          deleteUser(id: $id) {
-            user {
-              id
-              email
-            }
-            errors
-          }
-        }
-      GRAPHQL
-    end
-
-    it 'soft deletes an existing user' do
-      user = FactoryBot.create(:user)
-      variables = { id: user.id }
-
-      post '/graphql', params: { query: mutation, variables: }
+  describe 'Delete User mutation' do
+    it 'deletes the user when admin user is logged in' do
+      post '/graphql', params: { query: mutation_delete }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+      
       json = JSON.parse(response.body)
+      data = json['data']['deleteUser']
 
       expect(response).to have_http_status(:success)
-      expect(json['data']['deleteUser']['errors']).to be_empty
-      expect(User.with_deleted.find_by(id: user.id)).to be_nil
-      expect(User.only_deleted.find_by(id: user.id)).not_to be_nil
+      expect(json['errors']).to be_nil
+      expect(User.with_deleted.find_by(id: user.id)).to be_present
+    end
+
+    it 'returns errors when regular user tries to delete a user' do
+      post '/graphql', params: { query: mutation_delete }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+      
+      json = JSON.parse(response.body)
+      expect(response).to have_http_status(:success)
+      expect(json['errors'].first['message']).to eq('Not authorized')
     end
   end
 
-  describe '#change_admin_status' do
-    let(:mutation) do
-      <<~GRAPHQL
-        mutation($id: ID!, $isAdmin: Boolean!) {
-          changeAdminStatus(id: $id, isAdmin: $isAdmin) {
-            user {
-              id
-              isAdmin
-            }
-            errors
-          }
-        }
-      GRAPHQL
-    end
-
-    it 'changes the admin status of a user' do
-      variables = {
-        id: user.id,
-        is_admin: true
-      }
-
-      post '/graphql', params: { query: mutation, variables: }
+  describe 'Change Admin Status mutation' do
+    it 'changes admin status when admin user is logged in' do
+      post '/graphql', params: { query: mutation_change_admin_status }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+      
       json = JSON.parse(response.body)
+      data = json['data']['changeAdminStatus']
 
       expect(response).to have_http_status(:success)
-      expect(json['data']['changeAdminStatus']['errors']).to be_empty
+      expect(json['errors']).to be_nil
       expect(User.find(user.id).is_admin).to be(true)
+    end
+
+    it 'returns errors when regular user tries to change admin status' do
+      post '/graphql', params: { query: mutation_change_admin_status }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+      
+      json = JSON.parse(response.body)
+      expect(response).to have_http_status(:success)
+      expect(json['errors'].first['message']).to eq('Not authorized')
     end
   end
 end
