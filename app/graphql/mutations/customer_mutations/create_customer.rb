@@ -4,13 +4,11 @@ module Mutations
       argument :first_name, String, required: true
       argument :last_name, String, required: true
       argument :photo, String, required: false
-      argument :created_by_id, ID, required: false
-      argument :updated_by_id, ID, required: false
 
       field :customer, Types::CustomerType, null: true
       field :errors, [String], null: false
 
-      def resolve(first_name:, last_name:, photo: nil, created_by_id: nil, updated_by_id: nil)
+      def resolve(first_name:, last_name:, photo: nil)
         authorize context[:current_user], :create?, Customer
         customer = Customer.new(
           first_name:,

@@ -12,7 +12,6 @@ module ShopCrmApi
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 7.1
 
-    # Автозагрузка и eager load путей
     config.autoload_paths += %W(#{config.root}/app/services #{config.root}/app/graphql)
     config.eager_load_paths += %W(#{config.root}/app/services #{config.root}/app/graphql)
 
@@ -33,5 +32,11 @@ module ShopCrmApi
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    config.middleware.insert_before 0, Rack::ContentSecurityPolicy do |policy|
+      policy.default_src :self
+      policy.script_src :self
+      policy.style_src :self
+    end
   end
 end
