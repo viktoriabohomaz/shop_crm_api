@@ -14,6 +14,8 @@ gem 'puma', '>= 5.0'
 # GraphQL
 gem 'graphiql-rails', group: :development
 gem 'graphql'
+gem 'graphql-docs'
+
 
 # Authentication
 gem 'jwt'
