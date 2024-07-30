@@ -9,6 +9,6 @@ module Types
     field :update_customer, mutation: Mutations::CustomerMutations::UpdateCustomer
     field :delete_customer, mutation: Mutations::CustomerMutations::DeleteCustomer
 
-    field :authentication_mutations, mutation: Mutations::AuthMutations
+    field :auth_mutations, mutation: Mutations::AuthMutations
   end
 end

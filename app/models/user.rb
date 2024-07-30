@@ -1,6 +1,6 @@
 class User < ApplicationRecord
   acts_as_paranoid
-  
+
   after_save :clear_cache
 
   ### Associations

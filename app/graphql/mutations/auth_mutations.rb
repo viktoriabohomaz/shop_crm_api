@@ -1,16 +1,15 @@
 module Mutations
   class AuthMutations < BaseMutation
     argument :provider, String, required: true
-    argument :code, String, required: true
+    argument :token, String, required: true
 
     field :token, String, null: true
     field :errors, [String], null: false
 
-    def resolve(provider:, code:)
-      provider = get_oauth_provider(provider)
+    def resolve(provider:, token:)
+      provider = get_oauth_provider(provider, token)
       return { token: nil, errors: ['Invalid provider'] } unless provider
-
-      user_info = provider.user_info(code)
+      user_info = provider.user_info
 
       user = User.find_or_initialize_by(email: user_info['email'])
       user.assign_attributes(
@@ -30,10 +29,10 @@ module Mutations
 
     private
 
-    def get_oauth_provider(provider_name)
+    def get_oauth_provider(provider_name, token)
       case provider_name.downcase
       when 'google'
-        Oauth::Providers::Google.new
+        Oauth::Providers::Google.new(token)
       end
     end
   end
