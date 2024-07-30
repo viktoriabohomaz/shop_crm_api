@@ -19,8 +19,7 @@ gem 'graphql-docs'
 
 # Authentication
 gem 'jwt'
-gem 'omniauth'
-gem 'omniauth-google-oauth2'
+gem 'oauth2'
 
 # Authorization
 gem 'pundit'
@@ -58,7 +57,7 @@ group :development, :test do
   gem 'rubocop'
 end
 
-group :development do
-  # Speed up commands on slow machines / big apps [https://github.com/rails/spring]
-  # gem "spring"
+group :test do
+  gem 'ffaker'
+  gem 'factory_bot_rails'
 end
