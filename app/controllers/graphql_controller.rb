@@ -3,7 +3,7 @@ class GraphqlController < ApplicationController
 
   def execute
     query_string = params[:query]
-    query_variables = JSON.load(params[:variables]) || {}
+    query_variables = params[:variables]
     context = { current_user: @current_user }
     
     result = ApplicationSchema.execute(
