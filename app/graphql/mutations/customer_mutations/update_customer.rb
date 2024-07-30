@@ -5,15 +5,14 @@ module Mutations
       argument :first_name, String, required: false
       argument :last_name, String, required: false
       argument :photo, String, required: false
-      argument :updated_by_id, ID, required: true
 
       field :customer, Types::CustomerType, null: true
       field :errors, [String], null: false
 
-      def resolve(id:, first_name: nil, last_name: nil, photo: nil, created_by_id: nil,
-                  updated_by_id: nil)
+      def resolve(id:, first_name: nil, last_name: nil, photo: nil)
+        authorize context[:current_user], :update?, Customer
+
         customer = Customer.find_by(id:)
-        authorize context[:current_user], :update?, customer
 
         if customer&.update(
           first_name:,

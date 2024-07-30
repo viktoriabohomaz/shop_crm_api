@@ -88,8 +88,9 @@ RSpec.describe 'UserMutations', type: :request do
 
   describe 'Create User mutation' do
     it 'creates a new user when admin user is logged in' do
-      post '/graphql', params: { query: mutation_create }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
-      
+      post '/graphql', params: { query: mutation_create },
+                       headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+
       json = JSON.parse(response.body)
       data = json['data']['createUser']
 
@@ -99,10 +100,11 @@ RSpec.describe 'UserMutations', type: :request do
     end
 
     it 'returns errors when regular user tries to create a user' do
-      post '/graphql', params: { query: mutation_create }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
-      
+      post '/graphql', params: { query: mutation_create },
+                       headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+
       json = JSON.parse(response.body)
-      data = json['data']['createUser']
+      json['data']['createUser']
 
       expect(response).to have_http_status(:success)
       expect(json['errors'].first['message']).to eq('Not authorized')
@@ -111,8 +113,9 @@ RSpec.describe 'UserMutations', type: :request do
 
   describe 'Update User mutation' do
     it 'updates the user when admin user is logged in' do
-      post '/graphql', params: { query: mutation_update }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
-      
+      post '/graphql', params: { query: mutation_update },
+                       headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+
       json = JSON.parse(response.body)
       data = json['data']['updateUser']
 
@@ -122,8 +125,9 @@ RSpec.describe 'UserMutations', type: :request do
     end
 
     it 'returns errors when regular user tries to update a user' do
-      post '/graphql', params: { query: mutation_update }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
-      
+      post '/graphql', params: { query: mutation_update },
+                       headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+
       json = JSON.parse(response.body)
       expect(response).to have_http_status(:success)
       expect(json['errors'].first['message']).to eq('Not authorized')
@@ -132,10 +136,11 @@ RSpec.describe 'UserMutations', type: :request do
 
   describe 'Delete User mutation' do
     it 'deletes the user when admin user is logged in' do
-      post '/graphql', params: { query: mutation_delete }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
-      
+      post '/graphql', params: { query: mutation_delete },
+                       headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+
       json = JSON.parse(response.body)
-      data = json['data']['deleteUser']
+      json['data']['deleteUser']
 
       expect(response).to have_http_status(:success)
       expect(json['errors']).to be_nil
@@ -143,8 +148,9 @@ RSpec.describe 'UserMutations', type: :request do
     end
 
     it 'returns errors when regular user tries to delete a user' do
-      post '/graphql', params: { query: mutation_delete }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
-      
+      post '/graphql', params: { query: mutation_delete },
+                       headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+
       json = JSON.parse(response.body)
       expect(response).to have_http_status(:success)
       expect(json['errors'].first['message']).to eq('Not authorized')
@@ -153,10 +159,11 @@ RSpec.describe 'UserMutations', type: :request do
 
   describe 'Change Admin Status mutation' do
     it 'changes admin status when admin user is logged in' do
-      post '/graphql', params: { query: mutation_change_admin_status }, headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
-      
+      post '/graphql', params: { query: mutation_change_admin_status },
+                       headers: { 'Authorization': "Bearer #{authenticate(admin_user)}" }
+
       json = JSON.parse(response.body)
-      data = json['data']['changeAdminStatus']
+      json['data']['changeAdminStatus']
 
       expect(response).to have_http_status(:success)
       expect(json['errors']).to be_nil
@@ -164,8 +171,9 @@ RSpec.describe 'UserMutations', type: :request do
     end
 
     it 'returns errors when regular user tries to change admin status' do
-      post '/graphql', params: { query: mutation_change_admin_status }, headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
-      
+      post '/graphql', params: { query: mutation_change_admin_status },
+                       headers: { 'Authorization': "Bearer #{authenticate(regular_user)}" }
+
       json = JSON.parse(response.body)
       expect(response).to have_http_status(:success)
       expect(json['errors'].first['message']).to eq('Not authorized')

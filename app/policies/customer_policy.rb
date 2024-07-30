@@ -12,7 +12,7 @@ class CustomerPolicy < ApplicationPolicy
   end
 
   def update?
-    tuser.present?
+    user.present?
   end
 
   def destroy?

@@ -3,7 +3,7 @@ class Customer < ApplicationRecord
 
   ### Associations
   belongs_to :created_by, class_name: 'User'
-  belongs_to :updated_by, class_name: 'User', optional: true
+  belongs_to :updated_by, class_name: 'User'
 
   ### Validations
   validates :first_name, :last_name, presence: true

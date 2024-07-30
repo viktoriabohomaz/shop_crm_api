@@ -76,8 +76,9 @@ RSpec.describe 'AuthMutations', type: :request do
         }
       GQL
 
-      # Мокируем ошибку при вызове user_info
-      allow_any_instance_of(Oauth::Providers::Google).to receive(:user_info).and_raise(StandardError, 'Invalid token')
+      allow_any_instance_of(Oauth::Providers::Google).to receive(:user_info).and_raise(
+        StandardError, 'Invalid token'
+      )
 
       post '/graphql', params: { query: mutation }
 

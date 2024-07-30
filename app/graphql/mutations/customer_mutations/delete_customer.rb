@@ -7,7 +7,7 @@ module Mutations
       field :errors, [String], null: false
 
       def resolve(id:)
-        authorize context[:current_user], :destroy?, customer
+        authorize context[:current_user], :destroy?, Customer
         customer = Customer.with_deleted.find_by(id:)
 
         if customer&.destroy

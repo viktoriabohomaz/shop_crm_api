@@ -9,6 +9,7 @@ module Mutations
     def resolve(provider:, token:)
       provider = get_oauth_provider(provider, token)
       return { token: nil, errors: ['Invalid provider'] } unless provider
+
       user_info = provider.user_info
 
       user = User.find_or_initialize_by(email: user_info['email'])
