@@ -14,9 +14,9 @@ module Mutations
         authorize context[:current_user], :create?, Customer
 
         customer = Customer.new(
-          first_name: first_name,
-          last_name: last_name,
-          photo: photo,
+          first_name:,
+          last_name:,
+          photo:,
           created_by: context[:current_user],
           updated_by: context[:current_user]
         )

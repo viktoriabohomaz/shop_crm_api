@@ -1,5 +1,5 @@
 module Mutations
-  class UserMutations < BaseMutation
+  module UserMutations
     class DeleteUser < BaseMutation
       argument :id, ID, required: true
 
@@ -9,10 +9,10 @@ module Mutations
       def resolve(id:)
         authorize context[:current_user], :destroy?, User
 
-        user = User.with_deleted.find_by(id: id)
+        user = User.with_deleted.find_by(id:)
 
         if user&.destroy
-          { user: user, errors: [] }
+          { user:, errors: [] }
         else
           { user: nil, errors: ['User not found'] }
         end

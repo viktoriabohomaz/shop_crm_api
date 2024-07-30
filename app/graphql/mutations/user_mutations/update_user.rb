@@ -1,5 +1,5 @@
 module Mutations
-  class UserMutations < BaseMutation
+  module UserMutations
     class UpdateUser < BaseMutation
       argument :id, ID, required: true
       argument :email, String, required: false
@@ -13,10 +13,10 @@ module Mutations
       def resolve(id:, email: nil, first_name: nil, last_name: nil, is_admin: nil)
         authorize context[:current_user], :update?, User
 
-        user = User.find_by(id: id)
+        user = User.find_by(id:)
 
-        if user&.update(email: email, first_name: first_name, last_name: last_name, is_admin: is_admin)
-          { user: user, errors: [] }
+        if user&.update(email:, first_name:, last_name:, is_admin:)
+          { user:, errors: [] }
         else
           { user: nil, errors: user.errors.full_messages }
         end

@@ -1,5 +1,5 @@
 module Mutations
-  class UserMutations < BaseMutation
+  module UserMutations
     class ChangeAdminStatus < BaseMutation
       argument :id, ID, required: true
       argument :is_admin, Boolean, required: true
@@ -8,11 +8,16 @@ module Mutations
       field :errors, [String], null: false
 
       def resolve(id:, is_admin:)
-        user = User.find_by(id: id)
+        authorize context[:current_user], :change_admin_status?, User
+
+        user = User.find_by(id:)
 
         if user
-          user.update(is_admin: is_admin)
-          { user: user, errors: [] }
+          if user.update(is_admin:)
+            { user:, errors: [] }
+          else
+            { user: nil, errors: user.errors.full_messages }
+          end
         else
           { user: nil, errors: ['User not found'] }
         end

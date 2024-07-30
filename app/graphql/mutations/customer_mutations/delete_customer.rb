@@ -8,7 +8,7 @@ module Mutations
 
       def resolve(id:)
         authorize context[:current_user], :destroy?, customer
-        customer = Customer.with_deleted.find_by(id: id)
+        customer = Customer.with_deleted.find_by(id:)
 
         if customer&.destroy
           { customer:, errors: [] }

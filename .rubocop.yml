@@ -54,7 +54,6 @@ Metrics/BlockLength:
     - '**/*_spec.rb'
     - 'spec/factories/**/*.rb'
     - 'spec/support/shared_contexts/**/*.rb'
-    - 'spec/swagger_helper.rb'
 
 Metrics/BlockNesting:
   CountBlocks: false
