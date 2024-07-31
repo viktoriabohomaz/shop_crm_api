@@ -1,5 +1,5 @@
 module Mutations
-  class AuthMutations < BaseMutation
+  class LoginMutations < BaseMutation
     argument :provider, String, required: true
     argument :token, String, required: true
 
@@ -7,15 +7,15 @@ module Mutations
     field :errors, [String], null: false
 
     def resolve(provider:, token:)
-      provider = get_oauth_provider(provider, token)
-      return { token: nil, errors: ['Invalid provider'] } unless provider
+      oauth_provider = get_oauth_provider(provider, token)
+      return { token: nil, errors: ['Invalid provider'] } unless oauth_provider
 
-      user_info = provider.user_info
-
-      user = User.find_or_initialize_by(email: user_info['email'])
+      user_info = oauth_provider.user_info
+      user = User.find_or_initialize_by(uid: user_info[:uid], provider:)
       user.assign_attributes(
-        first_name: user_info['given_name'],
-        last_name: user_info['family_name']
+        first_name: user_info[:first_name],
+        last_name: user_info[:last_name],
+        email: user_info[:email]
       )
 
       if user.save

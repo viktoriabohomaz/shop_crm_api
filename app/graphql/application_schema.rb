@@ -1,6 +1,6 @@
 class ApplicationSchema < GraphQL::Schema
-  # query(Types::QueryType)
   mutation(Types::MutationType)
+  query(Types::QueryType)
 
   rescue_from(GraphQL::ExecutionError) do |exception|
     Rails.logger.error "GraphQL Execution Error: #{exception.message}"

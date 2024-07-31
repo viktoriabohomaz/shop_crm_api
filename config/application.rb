@@ -2,6 +2,7 @@
 require_relative 'boot'
 
 require 'rails/all'
+require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -14,6 +15,7 @@ module ShopCrmApi
 
     config.autoload_paths += %W(#{config.root}/app/services #{config.root}/app/graphql)
     config.eager_load_paths += %W(#{config.root}/app/services #{config.root}/app/graphql)
+
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
     # not contain `.rb` files, or that should not be reloaded or eager loaded.
@@ -33,10 +35,5 @@ module ShopCrmApi
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
 
-    config.middleware.insert_before 0, Rack::ContentSecurityPolicy do |policy|
-      policy.default_src :self
-      policy.script_src :self
-      policy.style_src :self
-    end
   end
 end
