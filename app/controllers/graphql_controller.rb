@@ -17,10 +17,6 @@ class GraphqlController < ApplicationController
     handle_error_in_development(e) if Rails.env.development?
   end
 
-  def graphiql
-    render 'graphql/graphiql/index'
-  end
-
   private
 
   def handle_error_in_development(error)
