@@ -1,13 +1,14 @@
 require 'rails_helper'
 
-RSpec.describe 'AuthMutations', type: :request do
+RSpec.describe 'loginMutations', type: :request do
   let(:provider) { 'google' }
   let(:token) { 'valid_token' }
   let(:user_info) do
     {
       'email' => 'test@example.com',
       'given_name' => 'Test',
-      'family_name' => 'Name'
+      'family_name' => 'Name',
+      'uid' => '1234'
     }
   end
 
@@ -15,11 +16,11 @@ RSpec.describe 'AuthMutations', type: :request do
     allow_any_instance_of(Oauth::Providers::Google).to receive(:user_info).and_return(user_info)
   end
 
-  describe 'authMutations mutation' do
+  describe 'loginMutations mutation' do
     it 'returns a token when valid provider and token are provided' do
       mutation = <<~GQL
         mutation {
-          authMutations(input: {
+          loginMutations(input: {
             provider: "#{provider}"
             token: "#{token}"
           }) {
@@ -32,7 +33,7 @@ RSpec.describe 'AuthMutations', type: :request do
       post '/graphql', params: { query: mutation }
 
       json = JSON.parse(response.body)
-      auth_mutations = json.dig('data', 'authMutations')
+      auth_mutations = json.dig('data', 'loginMutations')
 
       expect(response).to have_http_status(:success)
       expect(auth_mutations['errors']).to be_empty
@@ -66,7 +67,7 @@ RSpec.describe 'AuthMutations', type: :request do
       invalid_token = 'invalid_token'
       mutation = <<~GQL
         mutation {
-          authMutations(input: {
+          loginMutations(input: {
             provider: "#{provider}"
             token: "#{invalid_token}"
           }) {
@@ -83,7 +84,7 @@ RSpec.describe 'AuthMutations', type: :request do
       post '/graphql', params: { query: mutation }
 
       json = JSON.parse(response.body)
-      auth_mutations = json.dig('data', 'authMutations')
+      auth_mutations = json.dig('data', 'loginMutations')
 
       expect(response).to have_http_status(:success)
       expect(auth_mutations['token']).to be_nil

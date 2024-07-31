@@ -10,8 +10,8 @@ gem 'pg', '~> 1.5'
 gem 'puma', '~> 6.4'
 
 # GraphQL and related gems
+gem 'graphiql-rails', '~> 1.10'
 gem 'graphql', '~> 2.3'
-gem 'graphql-batch', '~> 0.6'
 gem 'graphql-docs', '~> 5.0'
 
 # Authentication
@@ -33,7 +33,7 @@ gem 'byebug', '~> 11.1'
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', '~> 1.18'
- 
+
 gem 'rack-cors', '~> 2.0'
 
 group :development, :test do
@@ -45,3 +45,5 @@ group :test do
   gem 'factory_bot_rails', '~> 6.4'
   gem 'ffaker', '~> 2.23'
 end
+
+gem 'propshaft', '~> 0.9.0'
