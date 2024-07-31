@@ -8,7 +8,9 @@ class Customer < ApplicationRecord
   ### Validations
   validates :first_name, :last_name, presence: true
   validates :created_by_id, :updated_by_id, presence: true
+  validates :photo, content_type: ['image/png', 'image/jpeg', 'image/jpg'], size: { between: 1.kilobyte..10.megabytes , message: 'is not given between size' }
 
-  has_attached_file :photo, styles: { medium: '300x300>', thumb: '100x100>' }
-  validates_attachment_content_type :photo, content_type: ['image/jpeg', 'image/jpg', 'image/png']
+  has_one_attached :photo do |attachable|
+    attachable.variant :thumb, resize_to_limit: [100, 100]
+  end
 end

@@ -89,15 +89,5 @@ Rails.application.configure do
   # Skip DNS rebinding protection for the default health check endpoint.
   # config.host_authorization = { exclude: ->(request) { request.path == "/up" } }
 
-    config.paperclip_defaults = {
-      storage: :s3,
-      s3_credentials: {
-        bucket: ENV['AWS_USER_UPLOADS_BUCKET'],
-        access_key_id: ENV['AWS_USER_UPLOADS_KEY_ID'],
-        secret_access_key: ENV['AWS_USER_UPLOADS_ACCESS_KEY'],
-        s3_region: ENV['AWS_REGION']
-      },
-      s3_region: ENV['AWS_REGION'],
-      s3_host_name: 's3.amazonaws.com'
-    }
+  config.active_storage.service = :local
 end
