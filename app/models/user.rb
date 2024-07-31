@@ -6,7 +6,7 @@ class User < ApplicationRecord
   ### Associations
   has_many :created_customers, class_name: 'Customer', foreign_key: 'created_by_id'
   has_many :updated_customers, class_name: 'Customer', foreign_key: 'updated_by_id'
-  
+
   ### Validations
   validates :uid, presence: true, if: -> { provider.present? }
   validates :provider, presence: true, if: -> { uid.present? }
