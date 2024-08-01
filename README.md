@@ -11,7 +11,7 @@ The **Shop CRM API** is a RESTful API designed to manage customer data for a sma
 - **Photo Handling**: Upload and manage customer profile photos.
 - **Authentication and Authorization**: Secure access using OAuth 2.0 and JWT for authentication, with role-based access control via Pundit.
 - **Soft Deletion**: Implemented using the `paranoia` gem to ensure data integrity and allow for data recovery.
-- **GraphQL Interface**: Efficiently query and mutate customer data using GraphQL, with a structured approach to mutations and queries and the ability to test queries and mutations in a user-friendly GraphiQL interface..
+- **GraphQL Interface**: Efficiently query and mutate customer data using GraphQL, with a structured approach to mutations and queries and the ability to test queries and mutations in a user-friendly GraphiQL interface.
 
 ## Getting Started
 
@@ -20,7 +20,6 @@ The **Shop CRM API** is a RESTful API designed to manage customer data for a sma
 Before you start, ensure you have the following installed:
 
 - Ruby 3.2.4
-- Rails 7.1
 - PostgreSQL
 - Docker
 
@@ -29,8 +28,8 @@ Before you start, ensure you have the following installed:
 1. **Clone the Repository**
 
     ```bash
-    git clone https://github.com/yourusername/your-repo.git
-    cd your-repo
+    git clone https://github.com/viktoriabohomaz/shop_crm_api.git
+    cd shop_crm_api
     ```
 
 2. **Install Dependencies**
@@ -46,17 +45,18 @@ Before you start, ensure you have the following installed:
     bin/rails db:migrate
     ```
 
-4. **Configure Active Storage**
-
-    Active Storage is configured to use Amazon S3 in production. For local development, it uses disk storage.
-
-    Update `config/storage.yml` with your S3 credentials if using Amazon S3.
-
-5. **Start the Server**
+4. **Start the Server**
 
     ```bash
     bin/rails server
     ```
+#### Running Tests Locally
+
+To run the tests for the project locally, use RSpec. Execute the following command:
+
+```bash
+bundle exec rspec spec --format documentation
+```
 
 ## Usage
 
@@ -68,61 +68,62 @@ You can interact with the API using GraphiQL at the following URL:
 
 ### GraphiQL Usage Example
 
-To execute a request in GraphiQL, use the GraphQL query. For example:
+To execute a request in GraphiQL, you can use the following GraphQL query format:
 
-    ```
-    mutation {
-    loginMutations(input: {
-        provider: "google"
-        token: "YOUR_OAUTH_TOKEN_HERE"
-    }) {
-        token
-        errors
-    }
-    }
-    ```
+#### Example Query
+##### Mutation to Login:
 
-Example fot customer creating:
-
-    ```
-    mutation {
-        createCustomer(input: {
-        firstName: "Name"
-        lastName: "Last"
-            photoBase64: "FILE_BASE64"
-            photoFileName: "image_name.png"
-        }) {
-        customer {
-            id
-            firstName
-            lastName
-                    photoUrl
-            createdBy {
-            id
-            email
-            firstName
-            lastName
-            }
-            updatedBy {
-            id
-            email
-            firstName
-            lastName
-            }
-        }
-        errors
+```graphql
+mutation {
+  loginMutations(input: {
+    provider: "google"
+    token: "YOUR_OAUTH_TOKEN_HERE"
+  }) {
+    token
+    errors
+  }
+}
+```
+##### Mutation to Create a Customer:
+      
+```graphql
+mutation {
+  createCustomer(input: {
+    firstName: "Name"
+    lastName: "Last"
+    photoBase64: "FILE_BASE64"
+    photoFileName: "image_name.png"
+  }) {
+    customer {
+      id
+      firstName
+      lastName
+      photoUrl
+      createdBy {
+        id
+        email
+        firstName
+        lastName
+      }
+      updatedBy {
+        id
+        email
+        firstName
+        lastName
+      }
     }
-    }
-    ```
+    errors
+  }
+}
+```    
  
-Be sure to include the following headers in your request (except login):
+###### Be sure to include the following headers in your request (except login):
 
-    ```
-    {
-        "Authorization": "Bearer YOUR_JWT_TOKEN_HERE"
-    }
-    ```
-
+```json
+{
+    "Authorization": "Bearer YOUR_JWT_TOKEN_HERE"
+}
+```
 
 ### Authentication
 
