@@ -5,9 +5,6 @@ on:
     branches:
       - main
       - development
-  pull_request:
-    branches:
-      - main
 
 jobs:
   build:
@@ -16,11 +13,12 @@ jobs:
     services:
       postgres:
         image: postgres:latest
-        options: >-
-          --health-cmd "pg_isready -U postgres"
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        env:
+          POSTGRES_DB: test_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+        ports:
+          - 5432:5432
 
     steps:
       - name: Checkout code
@@ -37,10 +35,10 @@ jobs:
           bundle config set --local path 'vendor/bundle'
           bundle install
 
-      - name: Set up PostgreSQL
+      - name: Wait for PostgreSQL to be ready
         run: |
-          sudo apt-get install -y postgresql-client
-          cp config/database.yml.ci config/database.yml
+          echo "Waiting for PostgreSQL to be ready..."
+          sleep 10
 
       - name: Set up database
         run: |
@@ -62,12 +60,6 @@ jobs:
                             --format RspecJunitFormatter \
                             --out ~/rspec/rspec.xml \
                             --format progress
-
-      - name: Store test results
-        uses: actions/upload-artifact@v2
-        with:
-          name: test-results
-          path: ~/rspec
 
   deploy:
     runs-on: ubuntu-latest
