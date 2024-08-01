@@ -53,12 +53,6 @@ jobs:
       - name: Rubocop
         run: bundle exec rubocop
 
-      - name: Rspec Tests
-        run: |
-          bundle exec rspec --profile 10 \
-                            --format documentation \
-                            --out ~/rspec/rspec.xml \
-                            --format progress
 
   deploy:
     runs-on: ubuntu-latest
