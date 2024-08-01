@@ -30,7 +30,8 @@ module Mutations
       private
 
       def upload_photo(customer, photo_base64, photo_file_name)
-        upload_service = ImageUploadService.new(photo_base64: photo_base64, file_name: photo_file_name)
+        upload_service = ImageUploadService.new(photo_base64:,
+                                                file_name: photo_file_name)
         upload_service.call
 
         customer.photo = File.new("tmp/#{photo_file_name}")

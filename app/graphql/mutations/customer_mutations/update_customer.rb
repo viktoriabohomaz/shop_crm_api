@@ -13,11 +13,9 @@ module Mutations
       def resolve(id:, first_name: nil, last_name: nil, photo_base64: nil, photo_file_name: nil)
         authorize context[:current_user], :update?, Customer
 
-        customer = Customer.find_by(id: id)
+        customer = Customer.find_by(id:)
 
-        if customer.nil?
-          return { customer: nil, errors: ['Customer not found'] }
-        end
+        return { customer: nil, errors: ['Customer not found'] } if customer.nil?
 
         customer.assign_attributes(
           first_name: first_name&.strip,
@@ -26,10 +24,8 @@ module Mutations
         )
 
         if customer.save
-          if photo_base64 && photo_file_name
-            upload_photo(customer, photo_base64, photo_file_name)
-          end
-          { customer: customer, errors: [] }
+          upload_photo(customer, photo_base64, photo_file_name) if photo_base64 && photo_file_name
+          { customer:, errors: [] }
         else
           { customer: nil, errors: customer.errors.full_messages }
         end
@@ -38,13 +34,14 @@ module Mutations
       private
 
       def upload_photo(customer, photo_base64, photo_file_name)
-        upload_service = ImageUploadService.new(photo_base64: photo_base64, file_name: photo_file_name)
+        upload_service = ImageUploadService.new(photo_base64:,
+                                                file_name: photo_file_name)
         upload_service.call
 
         customer.photo = File.new("tmp/#{photo_file_name}")
-        unless customer.save
-          return { customer: nil, errors: customer.errors.full_messages }
-        end
+        return if customer.save
+
+        { customer: nil, errors: customer.errors.full_messages }
       end
     end
   end

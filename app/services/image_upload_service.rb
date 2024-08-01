@@ -17,7 +17,6 @@ class ImageUploadService
   end
 
   def save_file
-    byebug
     File.open("tmp/#{file_name}", 'wb') do |f|
       f.write(Base64.decode64(photo_base64.split(',').last))
     end

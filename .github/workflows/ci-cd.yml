@@ -55,9 +55,8 @@ jobs:
 
       - name: Rspec Tests
         run: |
-          mkdir -p ~/rspec
           bundle exec rspec --profile 10 \
-                            --format RspecJunitFormatter \
+                            --format documentation \
                             --out ~/rspec/rspec.xml \
                             --format progress
 

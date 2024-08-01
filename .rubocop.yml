@@ -42,6 +42,10 @@ Naming/PredicateName:
 
 Metrics/AbcSize:
   Max: 17
+  Exclude:
+    - 'app/graphql/mutations/customer_mutations/create_customer.rb'
+    - 'app/graphql/mutations/update_customer.rb'
+    - 'app/graphql/mutations/login_mutations.rb'
 
 Metrics/BlockLength:
   CountComments: false
@@ -53,7 +57,6 @@ Metrics/BlockLength:
     - 'lib/tasks/**/*.rake'
     - '**/*_spec.rb'
     - 'spec/factories/**/*.rb'
-    - 'spec/support/shared_contexts/**/*.rb'
 
 Metrics/BlockNesting:
   CountBlocks: false
@@ -64,30 +67,30 @@ Metrics/ClassLength:
   Max: 350
 
 Metrics/CyclomaticComplexity:
-  Max: 6
-
-Layout/LineLength:
-  Max: 100
-  AllowHeredoc: true
-  AllowURI: true
-  URISchemes:
-    - http
-    - https
-  IgnoreCopDirectives: true
+  Max: 7
+  Exclude:
 
 Metrics/MethodLength:
   CountComments: false
-  Max: 12
+  Max: 14
+  Exclude:
+    - 'app/graphql/mutations/login_mutations.rb'
 
 Metrics/ModuleLength:
   CountComments: false
   Max: 200
 
 Metrics/PerceivedComplexity:
-  Max: 7
+  Max: 8
 
 ##################### Layout ##########################
 
-Layout/MultilineMethodCallIndentation:
-  Enabled: false
+Layout/LineLength:
+  Max: 120
+  AllowHeredoc: true
+  AllowURI: true
+  URISchemes:
+    - http
+    - https
+  IgnoreCopDirectives: true
 

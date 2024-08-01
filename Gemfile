@@ -21,9 +21,9 @@ gem 'oauth2', '~> 2.0'
 # Authorization
 gem 'pundit', '~> 2.3'
 
-gem 'image_processing', '~> 1.2' 
-gem 'aws-sdk-s3', '~> 1.0'     
 gem 'active_storage_validations', '~> 1.1', '>= 1.1.4'
+gem 'aws-sdk-s3', '~> 1.0'
+gem 'image_processing', '~> 1.2'
 
 # Soft delete
 gem 'paranoia', '~> 2.6'
