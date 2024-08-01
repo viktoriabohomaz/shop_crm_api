@@ -7,10 +7,11 @@ The **Shop CRM API** is a RESTful API designed to manage customer data for a sma
 ## Functionality
 
 - **Customer Management**: Create, read, update, and delete customer records.
-- **Photo Handling**: Upload and manage customer profile photos with support for image transformations.
+- **User Management**: Create, read, update, and delete customer records (for admin role). Change the admin status of users.
+- **Photo Handling**: Upload and manage customer profile photos.
 - **Authentication and Authorization**: Secure access using OAuth 2.0 and JWT for authentication, with role-based access control via Pundit.
 - **Soft Deletion**: Implemented using the `paranoia` gem to ensure data integrity and allow for data recovery.
-- **GraphQL Interface**: Efficiently query and mutate customer data using GraphQL, with a structured approach to mutations and queries.
+- **GraphQL Interface**: Efficiently query and mutate customer data using GraphQL, with a structured approach to mutations and queries and the ability to test queries and mutations in a user-friendly GraphiQL interface..
 
 ## Getting Started
 
@@ -21,8 +22,7 @@ Before you start, ensure you have the following installed:
 - Ruby 3.2.4
 - Rails 7.1
 - PostgreSQL
-- Docker (for development and deployment)
-- Heroku CLI (for deployment)
+- Docker
 
 ### Installation
 
@@ -70,7 +70,7 @@ You can interact with the API using GraphiQL at the following URL:
 
 To execute a request in GraphiQL, use the GraphQL query. For example:
 
-    ```graphql
+    ```
     mutation {
     loginMutations(input: {
         provider: "google"
@@ -84,7 +84,7 @@ To execute a request in GraphiQL, use the GraphQL query. For example:
 
 Example fot customer creating:
 
-    ```graphql
+    ```
     mutation {
         createCustomer(input: {
         firstName: "Name"
@@ -114,10 +114,10 @@ Example fot customer creating:
     }
     }
     ```
-
+ 
 Be sure to include the following headers in your request (except login):
 
-    ```json
+    ```
     {
         "Authorization": "Bearer YOUR_JWT_TOKEN_HERE"
     }
@@ -128,9 +128,9 @@ Be sure to include the following headers in your request (except login):
 
 Secure API access using OAuth 2.0 (Google provider). You can use the following token for authentication:
 
-    ```text
-    ya29.a0AXooCgv1HNus__uoHr8IyeJwCTmv8IhNCF46eaIm_Wek9hI9hNCamhtgvI4CgVMhv-z2NFXt7jI6wg-vHjG0BLSLv5OTC1j-sIldI2DshwsuM2TUiLUMiEO1S7o7BR07fXYTkoe1gRaPqlR5p9_aX0N8ucR0ovoC61lK8gaCgYKAWwSARASFQHGX2MiilkPQRjXfY9egdZQxBGqBw0173
-    ```
+```
+ya29.a0AXooCgtJaiS4opNHPWAVUvD6SQxq-TXIXJh-lKIUG9lA4z2ONXUIZAwqTakzFunBYU9qhGwbK12Q-l-UbnAjouLVDojlBngGs0ArJkouxzaV9zoS2DNrl8jh7byPKNRieXjKqFkIQ3EoPkZESsnzVXNjvKlQ1HkhBVgFFQaCgYKAa4SARASFQHGX2MisH42Efe0pG9c3KFHv9AZAg0173
+```
 
 If you faced with issues with invalid tokens or need a new one, please contact me via Slack. I'll provide you with a valid token for access.
 

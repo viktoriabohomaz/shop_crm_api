@@ -7,7 +7,7 @@ module Types
     end
 
     def list_customers(include_deleted:)
-      authorize Customer, :index?
+      authorize context[:current_user], :index?, Customer
       if include_deleted
         Customer.with_deleted
       else
@@ -20,9 +20,8 @@ module Types
     end
 
     def customer(id:)
-      customer = Customer.find(id)
-      authorize customer, :show?
-      customer
+      authorize context[:current_user], :show?, Customer
+      Customer.find(id)
     end
 
     field :list_users, [Types::UserType], null: false, description: 'Returns a list of all users' do
@@ -31,6 +30,7 @@ module Types
     end
 
     def list_users(include_deleted:)
+      authorize context[:current_user], :index?, User
       if include_deleted
         User.with_deleted
       else
@@ -43,9 +43,8 @@ module Types
     end
 
     def user(id:)
-      user = User.find(id)
-      authorize user, :show?
-      user
+      authorize context[:current_user], :show, User
+      User.find(id)
     end
   end
 end
