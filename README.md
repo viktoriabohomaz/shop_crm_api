@@ -66,7 +66,7 @@ You can interact with the API using GraphiQL at the following URL:
 
 [GraphiQL Interface](https://shop-crm-api-7409536b1857.herokuapp.com/graphiql)
 
-## GraphiQL Usage Example
+### GraphiQL Usage Example
 
 To execute a request in GraphiQL, use the GraphQL query. For example:
 

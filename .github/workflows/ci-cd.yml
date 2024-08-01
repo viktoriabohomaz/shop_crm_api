@@ -1,0 +1,89 @@
+name: CI/CD Pipeline
+
+  push:
+    branches:
+      - main
+      - development
+  pull_request:
+    branches:
+      - main
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        options: >-
+          --health-cmd "pg_isready -U postgres"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        env:
+          POSTGRES_HOST_AUTH_METHOD: trust
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 3.2.4
+
+      - name: Install dependencies
+        run: |
+          gem install bundler
+          bundle config set --local path 'vendor/bundle'
+          bundle install
+
+      - name: Set up PostgreSQL
+        run: sudo apt-get install -y postgresql-client
+          cp config/database.yml.ci config/database.yml
+
+      - name: Set up database
+        run: |
+          bundle exec rails db:create
+          bundle exec rails db:migrate
+
+      - name: Brakeman Security Check
+        run: |
+          gem install brakeman
+          brakeman --no-exit-on-warn
+
+      - name: Rubocop
+        run: bundle exec rubocop
+
+      - name: Rspec Tests
+        run: |
+          mkdir -p ~/rspec
+          bundle exec rspec --profile 10 \
+                            --format RspecJunitFormatter \
+                            --out ~/rspec/rspec.xml \
+                            --format progress
+
+      - name: Store test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-results
+          path: ~/rspec
+
+deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    if: github.event_name == 'push'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to Heroku
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+          HEROKU_APP_NAME: ${{ secrets.HEROKU_APP_NAME }}
+        run: |
+          git remote add heroku https://git.heroku.com/${{ secrets.HEROKU_APP_NAME }}.git
+          git push heroku main
